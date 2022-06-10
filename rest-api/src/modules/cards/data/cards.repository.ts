@@ -1,12 +1,11 @@
-import { CreateCardDto } from '../dto/create-card.dto';
-import { UpdateCardDto } from '../dto/update-card.dto';
+import { CardDto } from '../dto/card.dto';
 import { Card } from '../entities/card.entity';
 
 export interface CardsRepository {
-    create(createCardDto: CreateCardDto): Promise<Card>;
+    create(cardDto: CardDto): Promise<Card>;
     findAll(): Promise<Card[]>;
     findOne(id: string): Promise<Card>;
-    update(id: string, updateCardDto: UpdateCardDto): void;
+    update(id: string, cardDto: CardDto): void;
     remove(id: string): void;
     listByTag(id: string): Promise<Card[]>;
 }

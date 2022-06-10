@@ -1,8 +1,7 @@
 import { Inject, Injectable, NotFoundException } from '@nestjs/common';
 import { TagsService } from '../tags/tags.service';
 import { CardsRepository } from './data/cards.repository';
-import { CreateCardDto } from './dto/create-card.dto';
-import { UpdateCardDto } from './dto/update-card.dto';
+import { CardDto } from './dto/card.dto';
 import { CardsRepositoryProvide } from './provide';
 
 @Injectable()
@@ -13,12 +12,10 @@ export class CardsService {
         private readonly tagService: TagsService,
     ) {}
 
-    async create(createCardDto: CreateCardDto) {
-        createCardDto.tags = await this.tagService.findTagsById(
-            createCardDto.tagsId,
-        );
+    async create(cardDto: CardDto) {
+        cardDto.tags = await this.tagService.findTagsById(cardDto.tagsId);
 
-        return this.repository.create(createCardDto);
+        return this.repository.create(cardDto);
     }
 
     findAll() {
@@ -33,13 +30,11 @@ export class CardsService {
         return this.cardCanBeFound(id);
     }
 
-    async update(id: string, updateCardDto: UpdateCardDto) {
+    async update(id: string, cardDto: CardDto) {
         await this.cardCanBeFound(id);
-        updateCardDto.tags = await this.tagService.findTagsById(
-            updateCardDto.tagsId,
-        );
-        delete updateCardDto.tagsId;
-        return this.repository.update(id, updateCardDto);
+        cardDto.tags = await this.tagService.findTagsById(cardDto.tagsId);
+        delete cardDto.tagsId;
+        return this.repository.update(id, cardDto);
     }
 
     async remove(id: string) {

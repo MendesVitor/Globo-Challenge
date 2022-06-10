@@ -1,8 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { In, Repository } from 'typeorm';
-import { CreateTagDto } from '../dto/create-tag.dto';
-import { UpdateTagDto } from '../dto/update-tag.dto';
+import { TagDto } from '../dto/tag.dto';
 import { Tag } from '../entities/tag.entity';
 import { TagsRepository } from './tags.repository';
 
@@ -13,8 +12,8 @@ export class TagsTypeormRepository implements TagsRepository {
         private readonly repository: Repository<Tag>,
     ) {}
 
-    async create(createTagDto: CreateTagDto) {
-        return this.repository.save(createTagDto);
+    async create(tagDto: TagDto) {
+        return this.repository.save(tagDto);
     }
 
     async findAll() {
@@ -25,8 +24,8 @@ export class TagsTypeormRepository implements TagsRepository {
         return this.repository.findOne({ where: { id } });
     }
 
-    update(id: string, updateTagDto: UpdateTagDto) {
-        this.repository.update(id, updateTagDto);
+    update(id: string, tagDto: TagDto) {
+        this.repository.update(id, tagDto);
     }
 
     async remove(id: string) {

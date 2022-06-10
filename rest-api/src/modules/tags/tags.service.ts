@@ -5,8 +5,7 @@ import {
     NotFoundException,
 } from '@nestjs/common';
 import { TagsRepository } from './data/tags.repository';
-import { CreateTagDto } from './dto/create-tag.dto';
-import { UpdateTagDto } from './dto/update-tag.dto';
+import { TagDto } from './dto/tag.dto';
 import { TagsRepositoryProvide } from './provide';
 
 @Injectable()
@@ -16,9 +15,9 @@ export class TagsService {
         private readonly repository: TagsRepository,
     ) {}
 
-    async create(createTagDto: CreateTagDto) {
-        await this.TagAlreadyExists(createTagDto.name);
-        return this.repository.create(createTagDto);
+    async create(tagDto: TagDto) {
+        await this.TagAlreadyExists(tagDto.name);
+        return this.repository.create(tagDto);
     }
 
     findAll() {
@@ -33,10 +32,10 @@ export class TagsService {
         return this.repository.findTagsById(ids);
     }
 
-    async update(id: string, updateTagDto: UpdateTagDto) {
-        await this.TagAlreadyExists(updateTagDto.name);
+    async update(id: string, tagDto: TagDto) {
+        await this.TagAlreadyExists(tagDto.name);
         await this.tagCanBeFound(id);
-        return this.repository.update(id, updateTagDto);
+        return this.repository.update(id, tagDto);
     }
 
     async remove(id: string) {
