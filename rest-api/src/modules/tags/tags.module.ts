@@ -2,7 +2,7 @@ import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { TagsTypeormRepository } from './data/tags.typeorm.repository';
 import { Tag } from './entities/tag.entity';
-import { TagRepositoryProvide } from './provide';
+import { TagsRepositoryProvide } from './provide';
 import { TagsController } from './tags.controller';
 import { TagsService } from './tags.service';
 
@@ -11,10 +11,11 @@ import { TagsService } from './tags.service';
     controllers: [TagsController],
     providers: [
         {
-            provide: TagRepositoryProvide,
+            provide: TagsRepositoryProvide,
             useClass: TagsTypeormRepository,
         },
         TagsService,
     ],
+    exports: [TagsService],
 })
 export class TagsModule {}

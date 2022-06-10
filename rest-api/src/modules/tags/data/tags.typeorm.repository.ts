@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { In, Repository } from 'typeorm';
 import { CreateTagDto } from '../dto/create-tag.dto';
 import { UpdateTagDto } from '../dto/update-tag.dto';
 import { Tag } from '../entities/tag.entity';
@@ -12,9 +12,6 @@ export class TagsTypeormRepository implements TagsRepository {
         @InjectRepository(Tag)
         private readonly repository: Repository<Tag>,
     ) {}
-    findByName(name: string): Promise<Tag> {
-        return this.repository.findOne({ where: { name } });
-    }
 
     async create(createTagDto: CreateTagDto) {
         return this.repository.save(createTagDto);
@@ -34,5 +31,13 @@ export class TagsTypeormRepository implements TagsRepository {
 
     async remove(id: string) {
         this.repository.delete(id);
+    }
+
+    findTagsById(ids: string[]) {
+        return this.repository.find({ where: { id: In(ids) } });
+    }
+
+    findByName(name: string) {
+        return this.repository.findOne({ where: { name } });
     }
 }
