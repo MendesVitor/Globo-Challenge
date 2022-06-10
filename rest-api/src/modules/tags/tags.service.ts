@@ -7,17 +7,17 @@ import {
 import { TagsRepository } from './data/tags.repository';
 import { CreateTagDto } from './dto/create-tag.dto';
 import { UpdateTagDto } from './dto/update-tag.dto';
-import { TagRepositoryProvide } from './provide';
+import { TagsRepositoryProvide } from './provide';
 
 @Injectable()
 export class TagsService {
     constructor(
-        @Inject(TagRepositoryProvide)
+        @Inject(TagsRepositoryProvide)
         private readonly repository: TagsRepository,
     ) {}
 
     async create(createTagDto: CreateTagDto) {
-        await this.verifyIfTagExists(createTagDto.name);
+        await this.TagAlreadyExists(createTagDto.name);
         return this.repository.create(createTagDto);
     }
 
@@ -26,21 +26,25 @@ export class TagsService {
     }
 
     async findOne(id: string) {
-        return await this.getTagById(id);
+        return await this.tagCanBeFound(id);
+    }
+
+    async findTagsById(ids: string[]) {
+        return this.repository.findTagsById(ids);
     }
 
     async update(id: string, updateTagDto: UpdateTagDto) {
-        await this.verifyIfTagExists(updateTagDto.name);
-        await this.getTagById(id);
+        await this.TagAlreadyExists(updateTagDto.name);
+        await this.tagCanBeFound(id);
         return this.repository.update(id, updateTagDto);
     }
 
     async remove(id: string) {
-        await this.getTagById(id);
+        await this.tagCanBeFound(id);
         return this.repository.remove(id);
     }
 
-    private async getTagById(id: string) {
+    private async tagCanBeFound(id: string) {
         const tag = await this.repository.findOne(id);
         if (!tag) {
             throw new NotFoundException('Tag not found');
@@ -49,7 +53,7 @@ export class TagsService {
         return tag;
     }
 
-    private async verifyIfTagExists(name: string) {
+    private async TagAlreadyExists(name: string) {
         if (await this.repository.findByName(name)) {
             throw new ConflictException('Tag already exists');
         }

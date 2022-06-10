@@ -1,1 +1,1 @@
-export const TagRepositoryProvide = 'Tag_Repository';
+export const TagsRepositoryProvide = 'Tag_Repository';

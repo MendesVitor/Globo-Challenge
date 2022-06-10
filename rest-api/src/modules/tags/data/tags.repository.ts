@@ -9,4 +9,5 @@ export interface TagsRepository {
     update(id: string, updateTagDto: UpdateTagDto): void;
     remove(id: string): void;
     findByName(name: string): Promise<Tag>;
+    findTagsById(ids: string[]): Promise<Tag[]>;
 }
