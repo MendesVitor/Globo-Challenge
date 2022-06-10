@@ -1,6 +1,5 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
-import { randomUUID } from 'crypto';
 import { TagsTypeormRepository } from 'src/modules/tags/data/tags.typeorm.repository';
 import { Tag } from 'src/modules/tags/entities/tag.entity';
 import { TagMock } from './tag.mock';
