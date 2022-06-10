@@ -1,9 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Tag } from 'src/modules/tags/entities/tag.entity';
 import { Repository } from 'typeorm';
-import { CreateCardDto } from '../dto/create-card.dto';
-import { UpdateCardDto } from '../dto/update-card.dto';
+import { CardDto } from '../dto/card.dto';
+
 import { Card } from '../entities/card.entity';
 import { CardsRepository } from './cards.repository';
 
@@ -14,8 +13,8 @@ export class CardsTypeormRepository implements CardsRepository {
         private readonly repository: Repository<Card>,
     ) {}
 
-    async create(createCardDto: CreateCardDto): Promise<Card> {
-        return this.repository.save(createCardDto);
+    async create(cardDto: CardDto): Promise<Card> {
+        return this.repository.save(cardDto);
     }
 
     async findAll() {
@@ -30,8 +29,8 @@ export class CardsTypeormRepository implements CardsRepository {
         return this.repository.find({ where: { tags: { id } } });
     }
 
-    update(id: string, updateCardDto: UpdateCardDto) {
-        this.repository.save({ id, ...updateCardDto });
+    update(id: string, cardDto: CardDto) {
+        this.repository.save({ id, ...cardDto });
     }
 
     async remove(id: string) {
