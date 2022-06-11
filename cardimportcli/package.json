@@ -20,6 +20,7 @@
     "@oclif/core": "^1",
     "@oclif/plugin-help": "^5",
     "@oclif/plugin-plugins": "^2.0.1",
+    "csv-parse": "^5.1.0",
     "dotenv": "^16.0.1",
     "pg": "^8.7.3"
   },
