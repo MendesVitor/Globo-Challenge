@@ -40,7 +40,7 @@ export default class Import extends Command {
         await db.query("BEGIN");
 
         for (let i = 1; i < data.length; i++) {
-          if (data[i][0] && data[i][1]) {
+          if (data[i][0]) {
             const cardsResponse = await db.query(
               `INSERT INTO card(text) VALUES('${data[i][0]}') RETURNING id`
             );
@@ -49,17 +49,18 @@ export default class Import extends Command {
               const tag = await db.query(
                 `SELECT id FROM tag WHERE name = '${element}'`
               );
-              if (tag.rowCount < 1) {
+              if (tag.rowCount < 1 && data[i][1]) {
                 tagsResponse = await db.query(
                   `INSERT INTO tag(name) VALUES('${element}') RETURNING id`
                 );
               }
-
-              await db.query(
-                `INSERT INTO card_tags_tag("cardId","tagId") VALUES('${
-                  cardsResponse.rows[0].id
-                }','${tagsResponse?.rows[0].id ?? tag.rows[0].id}')`
-              );
+              if (data[i][1]) {
+                await db.query(
+                  `INSERT INTO card_tags_tag("cardId","tagId") VALUES('${
+                    cardsResponse.rows[0].id
+                  }','${tagsResponse?.rows[0].id ?? tag.rows[0].id}')`
+                );
+              }
             }
           }
         }
