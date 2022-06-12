@@ -13,7 +13,10 @@ export class CardsService {
     ) {}
 
     async create(cardDto: CardDto) {
-        cardDto.tags = await this.tagService.findTagsById(cardDto.tagsId);
+        if (cardDto.tagsId) {
+            cardDto.tags = await this.tagService.findTagsById(cardDto.tagsId);
+            delete cardDto.tagsId;
+        }
 
         return this.repository.create(cardDto);
     }
@@ -32,8 +35,11 @@ export class CardsService {
 
     async update(id: string, cardDto: CardDto) {
         await this.cardCanBeFound(id);
-        cardDto.tags = await this.tagService.findTagsById(cardDto.tagsId);
-        delete cardDto.tagsId;
+        if (cardDto.tagsId) {
+            cardDto.tags = await this.tagService.findTagsById(cardDto.tagsId);
+            delete cardDto.tagsId;
+        }
+
         return this.repository.update(id, cardDto);
     }
 
