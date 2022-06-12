@@ -1,6 +1,8 @@
 import { ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
+import * as csurf from 'csurf';
+import helmet from 'helmet';
 import { AppModule } from './app.module';
 import { validateEnvVars } from './shared/configs/environment.config';
 
@@ -19,6 +21,8 @@ async function bootstrap() {
     SwaggerModule.setup('api', app, document);
 
     app.useGlobalPipes(new ValidationPipe());
+    app.use(helmet());
+    app.use(csurf());
     app.enableCors();
     await app.listen(3000);
 }
