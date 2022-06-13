@@ -1,5 +1,5 @@
 import { ApiHideProperty, ApiProperty } from '@nestjs/swagger';
-import { IsDefined, IsNotEmpty, IsString } from 'class-validator';
+import { IsDefined, IsNotEmpty, IsOptional, IsString } from 'class-validator';
 import { randomUUID } from 'crypto';
 import { Tag } from 'src/modules/tags/entities/tag.entity';
 
@@ -17,6 +17,7 @@ export class CardDto {
     })
     @IsDefined()
     @IsNotEmpty()
+    @IsOptional()
     tagsId: string[];
 
     @ApiHideProperty()

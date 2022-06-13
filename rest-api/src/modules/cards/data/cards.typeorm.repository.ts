@@ -18,7 +18,7 @@ export class CardsTypeormRepository implements CardsRepository {
     }
 
     async findAll() {
-        return this.repository.find();
+        return this.repository.find({ order: { created_at: 'ASC' } });
     }
 
     async findOne(id: string) {
@@ -26,7 +26,10 @@ export class CardsTypeormRepository implements CardsRepository {
     }
 
     listByTag(id: string): Promise<Card[]> {
-        return this.repository.find({ where: { tags: { id } } });
+        return this.repository.find({
+            where: { tags: { id } },
+            order: { created_at: 'ASC' },
+        });
     }
 
     update(id: string, cardDto: CardDto) {
