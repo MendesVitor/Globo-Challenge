@@ -1,8 +1,11 @@
 import { Box, Container, Toolbar, Typography, IconButton, Link } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
-import { NavLink } from "react-router-dom";
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import { NavLink, useLocation } from "react-router-dom";
 
 export function Navbar() {
+  const location = useLocation();
+
   return (
     <Box
       sx={{
@@ -31,11 +34,19 @@ export function Navbar() {
           >
             Insights
           </Typography>
-          <Link component={NavLink} to={"/new"} color="black" underline="none" variant="button">
-            <IconButton>
-              <AddIcon />
-            </IconButton>
-          </Link>
+          {location.pathname === "/" ? (
+            <Link component={NavLink} to={"/new"} color="black" underline="none" variant="button">
+              <IconButton>
+                <AddIcon />
+              </IconButton>
+            </Link>
+          ) : (
+            <Link component={NavLink} to={"/"} color="black" underline="none" variant="button">
+              <IconButton>
+                <ArrowBackIcon />
+              </IconButton>
+            </Link>
+          )}
         </Toolbar>
       </Container>
     </Box>

@@ -1,8 +1,10 @@
-import { Box, Grid, Paper, styled, TextField, Button, Typography, Autocomplete, Chip } from "@mui/material";
+import { Autocomplete, Box, Button, Chip, Grid, Paper, styled, TextField, Typography } from "@mui/material";
 
 import { useEffect, useState } from "react";
 
 import { api } from "../services/api";
+
+import { useNavigate } from "react-router-dom";
 
 interface tags {
   id: string;
@@ -19,12 +21,24 @@ export const Card = styled(Paper)(({ theme }) => ({
 }));
 
 export function NewCard() {
+  const navigate = useNavigate();
   const [response, setResponse] = useState<tags[]>([]);
   const [cardText, setCardText] = useState<string>("");
-  const [tagsId, setTagsId] = useState<tags[]>([]);
+  const [tagsName, setTagsName] = useState<string[]>([]);
 
   async function createCard() {
-    await api.post("/cards", { text:'aaaaa'});
+    const tagsId: string[] = [];
+    tagsName.forEach((element: string) => {
+      response.forEach((tag) => {
+        if (element === tag.name) {
+          tagsId.push(tag.id);
+        }
+      });
+    });
+
+    await api.post("/cards", { text: cardText, tagsId });
+
+    navigate("/");
   }
   useEffect(() => {
     api.get("/tags").then((response: any) => {
@@ -50,7 +64,8 @@ export function NewCard() {
               <Box>
                 <TextField
                   id="standard-helperText"
-                  helperText="Some important text"
+                  label="Insight"
+                  helperText="Escreva aqui o seu insight"
                   variant="standard"
                   fullWidth={true}
                   multiline
@@ -58,7 +73,6 @@ export function NewCard() {
                   inputProps={{ maxLength: 400 }}
                   onChange={(value) => {
                     setCardText(value.target.value);
-                    console.log(value.target.value, cardText.length);
                   }}
                 />
               </Box>
@@ -68,13 +82,13 @@ export function NewCard() {
                   id="tags-filled"
                   options={response.map((option) => option.name)}
                   freeSolo
-                  onChange={(_, value) => console.log('aaa')}
+                  onChange={(_, value) => setTagsName(value)}
                   renderTags={(value: readonly string[], getTagProps) =>
                     value.map((option: string, index: number) => (
                       <Chip variant="outlined" label={option} {...getTagProps({ index })} />
                     ))
                   }
-                  renderInput={(params) => <TextField {...params} variant="filled" label="Tags" />}
+                  renderInput={(params) => <TextField {...params} variant="filled" label="Categoria" helperText="Adicione uma categoria (opcional)"/>}
                 />
               </Box>
             </Card>
