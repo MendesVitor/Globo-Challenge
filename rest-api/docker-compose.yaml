@@ -9,6 +9,7 @@ services:
       - "5432:5432"
     volumes:
       - ./db_data:/var/lib/postgresql/data
+      - ./devops/db/dummy_dump.sql:/docker-entrypoint-initdb.d/dummy_dump.sql
     networks:
       - db_net
 
